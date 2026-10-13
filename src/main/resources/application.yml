@@ -10,10 +10,18 @@ spring:
       chat:
         options:
           model: qwen-plus
+    mcp:
+      client:
+#        sse:
+#          connections:
+#            server1:
+#              url: http://localhost:8127
+        stdio:
+          servers-configuration: classpath:mcp-servers.json
   datasource:
-    url: jdbc:postgresql://pgm-uf6uo4af1355uviq9o.rwlb.rds.aliyuncs.com:5432/xu-ai-agent
-    username: xucheng
-    password: Xu577525866
+    url: jdbc:postgresql://127.0.0.1:5432/xu-ai-agent
+    username: postgres
+    password: 123456
     vectorstore:
       pgvector:
         index-type: hnsw
@@ -40,3 +48,5 @@ knife4j:
   enable: true
   setting:
     language: zh_cn
+search-api:
+  api-key:

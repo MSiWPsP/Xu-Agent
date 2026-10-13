@@ -25,27 +25,49 @@ public class LoveAppDocumentLoader {
         this.resourcePatternResolver = resourcePatternResolver;
     }
 
-    public List<Document> loadMarkDown(){
+    public List<Document> loadMarkDown() {
+
         List<Document> allDocuments = new ArrayList<>();
-        //加载多篇MarkDown文档
-        Resource[] resources = null;
+
         try {
-            resources = resourcePatternResolver.getResources("classpath:document/*");
+            Resource[] resources =
+                    resourcePatternResolver.getResources("classpath:document/*");
+
             for (Resource resource : resources) {
+
                 String filename = resource.getFilename();
-                MarkdownDocumentReaderConfig config = MarkdownDocumentReaderConfig.builder()
-                        .withHorizontalRuleCreateDocument(true)
-                        .withIncludeCodeBlock(false)
-                        .withIncludeBlockquote(false)
-                        .withAdditionalMetadata("filename",filename)
-                        .build();
-                MarkdownDocumentReader markdownDocumentReader = new MarkdownDocumentReader(resource, config);
-                List<Document> documents = markdownDocumentReader.get();
+
+                String status = null;
+
+                if (filename.contains("单身篇")) {
+                    status = "单身";
+                } else if (filename.contains("已婚篇")) {
+                    status = "已婚";
+                } else if (filename.contains("恋爱篇")) {
+                    status = "恋爱";
+                }
+
+                MarkdownDocumentReaderConfig config =
+                        MarkdownDocumentReaderConfig.builder()
+                                .withHorizontalRuleCreateDocument(true)
+                                .withIncludeCodeBlock(false)
+                                .withIncludeBlockquote(false)
+                                .withAdditionalMetadata("filename", filename)
+                                .withAdditionalMetadata("status", status)
+                                .build();
+
+                MarkdownDocumentReader reader =
+                        new MarkdownDocumentReader(resource, config);
+
+                List<Document> documents = reader.get();
+
                 allDocuments.addAll(documents);
             }
+
         } catch (IOException e) {
-              log.error("Markdown 文档加载失败",e);
+            log.error("Markdown 文档加载失败", e);
         }
+
         return allDocuments;
     }
 

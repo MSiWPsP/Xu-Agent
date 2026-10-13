@@ -1,0 +1,16 @@
+spring:
+  ai:
+    mcp:
+      server:
+        name: xu-image-search-mcp-server
+        version: 0.0.1
+        type: SYNC
+        # stdio
+        stdio: true
+
+# stdio
+  main:
+    web-application-type: none
+    banner-mode: off
+pixabay:
+  api-key: ${PIXABAY_API_KEY:57871397-39d47b60730dda3a83de8e39b}

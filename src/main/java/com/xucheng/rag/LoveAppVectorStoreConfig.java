@@ -1,6 +1,7 @@
 package com.xucheng.rag;
 
 import com.alibaba.cloud.ai.dashscope.api.DashScopeApi;
+import jakarta.annotation.Resource;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
@@ -17,13 +18,19 @@ import java.util.List;
 @Configuration
 public class LoveAppVectorStoreConfig {
 
-    @Autowired
+    @Resource
     private LoveAppDocumentLoader loveAppDocumentLoader;
 
-    @Bean
+    @Resource
+    private MyKeywordEnricher myKeywordEnricher;
+
+//    @Bean
     VectorStore loveAppVectorStore(EmbeddingModel dashscopeEmbeddingModel ){
         SimpleVectorStore simpleVectorStore = SimpleVectorStore.builder(dashscopeEmbeddingModel).build();
+        //加载文档
         List<Document> documents = loveAppDocumentLoader.loadMarkDown();
+        //自动补充关键词元信息
+        myKeywordEnricher.enrichDocuments(documents);
         simpleVectorStore.add(documents);
         return simpleVectorStore;
     }
